@@ -16,6 +16,14 @@
     
     <!-- A8.net brandsafe.js事前読み込み -->
     <script type='text/javascript' src='https://ad-verification.a8.net/ad/js/brandsafe.js'></script>
+    <script type='text/javascript'>
+        // A8.netのアフィリエイトID
+        const A8_AFFILIATE_ID = '457C4C+DEUKDU+38L8+BXQOH';
+        const A8_SITE_ID = '1734';
+        const A8_ARTICLE_ID = '658';
+        const A8_LINK_ID = '2971';
+        const A8_IMAGE_ID = '3218';
+    </script>
     
     <style>
         * {
@@ -604,12 +612,12 @@
             let affiliateButton = '';
             
             if (cardKey === 'epos') {
-                // エポスカードの場合は実際のA8.netバナーコード（完全版）
+                // エポスカードの場合はA8.netバナーコード
                 affiliateButton = '<div class="a8-banner-area">' +
                     '<div class="banner-label">🎯 診断結果に基づくおすすめカード</div>' +
                     '<div id="a8-epos-banner-container">' +
-                        '<div id="div_admane_async_1734_658_2971"></div>' +
-                        '<img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=457C4C+DEUKDU+38L8+BXQOH" alt="">' +
+                        '<div id="div_admane_async_' + A8_SITE_ID + '_' + A8_ARTICLE_ID + '_' + A8_LINK_ID + '"></div>' +
+                        '<img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=' + A8_AFFILIATE_ID + '" alt="">' +
                     '</div>' +
                     '</div>';
             } else {
@@ -631,42 +639,33 @@
                     affiliateButton +
                 '</div>';
             
-            // エポスカードの場合、A8.netバナーコードを複数の方法で実行
+            // エポスカードの場合、A8.netバナーコードを実行
             if (cardKey === 'epos') {
-                // 方法1: スクリプト要素を動的に追加
-                setTimeout(function() {
-                    const container = document.getElementById('a8-epos-banner-container');
-                    if (container) {
-                        // 既存のスクリプトを削除
-                        const existingScripts = container.querySelectorAll('script');
-                        existingScripts.forEach(function(script) {
-                            script.remove();
-                        });
-                        
-                        // 新しいスクリプト要素を作成
-                        const newScript = document.createElement('script');
-                        newScript.type = 'text/javascript';
-                        newScript.innerHTML = 'brandsafe_js_async("//ad-verification.a8.net/ad", "_site=1734&_article=658&_link=2971&_image=3218&_ns=1&sad=s00000015110002", "250605084811", "457C4C+DEUKDU+38L8+BXQOH");';
-                        container.appendChild(newScript);
-                    }
-                }, 500);
-                
-                // 方法2: 直接関数実行（バックアップ）
-                setTimeout(function() {
+                // バナー読み込み用の関数
+                function loadA8Banner() {
                     if (typeof brandsafe_js_async === 'function') {
                         try {
-                            brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link=2971&_image=3218&_ns=1&sad=s00000015110002', '250605084811', '457C4C+DEUKDU+38L8+BXQOH');
+                            brandsafe_js_async(
+                                '//ad-verification.a8.net/ad',
+                                '_site=' + A8_SITE_ID + '&_article=' + A8_ARTICLE_ID + '&_link=' + A8_LINK_ID + '&_image=' + A8_IMAGE_ID + '&_ns=1&sad=s00000015110002',
+                                '250605084811',
+                                A8_AFFILIATE_ID
+                            );
                             console.log('A8.net banner loaded successfully');
                         } catch (error) {
                             console.error('A8.net banner loading error:', error);
-                            // フォールバック: 手動リンク表示
                             showFallbackLink();
                         }
                     } else {
                         console.warn('brandsafe_js_async function not available');
                         showFallbackLink();
                     }
-                }, 1000);
+                }
+
+                // バナーの読み込みを試みる
+                setTimeout(loadA8Banner, 500);
+                // バックアップとして1秒後にもう一度試みる
+                setTimeout(loadA8Banner, 1000);
             }
         }
         
