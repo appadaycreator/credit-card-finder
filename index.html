@@ -641,8 +641,12 @@
             
             // エポスカードの場合、A8.netバナーコードを実行
             if (cardKey === 'epos') {
+                let bannerLoaded = false;
+                
                 // バナー読み込み用の関数
                 function loadA8Banner() {
+                    if (bannerLoaded) return; // 既にバナーが読み込まれている場合は何もしない
+                    
                     if (typeof brandsafe_js_async === 'function') {
                         try {
                             brandsafe_js_async(
@@ -651,14 +655,19 @@
                                 '250605084811',
                                 A8_AFFILIATE_ID
                             );
+                            bannerLoaded = true;
                             console.log('A8.net banner loaded successfully');
                         } catch (error) {
                             console.error('A8.net banner loading error:', error);
-                            showFallbackLink();
+                            if (!bannerLoaded) {
+                                showFallbackLink();
+                            }
                         }
                     } else {
                         console.warn('brandsafe_js_async function not available');
-                        showFallbackLink();
+                        if (!bannerLoaded) {
+                            showFallbackLink();
+                        }
                     }
                 }
 
@@ -676,7 +685,7 @@
                 container.innerHTML = 
                     '<div style="text-align: center; padding: 20px; background: #f0f8ff; border: 2px solid #4169e1; border-radius: 10px;">' +
                         '<p style="margin: 0 0 15px 0; color: #4169e1; font-weight: bold;">🎯 エポスカード申し込みはこちら</p>' +
-                        '<a href="https://www.eposcard.co.jp/" target="_blank" rel="noopener" class="affiliate-btn" style="background: linear-gradient(135deg, #ff6b6b, #ee5a24);">' +
+                        '<a href="https://www.eposcard.co.jp/apply/?scid=wi_ich_cc_apply&sc2id=' + A8_AFFILIATE_ID + '" target="_blank" rel="noopener" class="affiliate-btn" style="background: linear-gradient(135deg, #ff6b6b, #ee5a24);">' +
                             '📝 エポスカード公式サイトへ' +
                         '</a>' +
                         '<p style="margin: 15px 0 0 0; font-size: 0.8rem; color: #666;">※ 年会費永年無料・即日発行可能</p>' +
