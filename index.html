@@ -562,6 +562,34 @@
             const card = cardDatabase[cardKey];
             const recommendationDiv = document.getElementById('recommendation');
             
+            let affiliateButton = '';
+            
+            if (cardKey === 'epos') {
+                // エポスカードの場合はA8.netバナーのプレースホルダー
+                affiliateButton = `
+                    <div style="text-align: center; margin-top: 20px;">
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">
+                            ↓ A8.netエポスカードバナー表示エリア ↓
+                        </p>
+                        <div id="a8-epos-banner" style="min-height: 100px; border: 2px dashed #ccc; padding: 20px; border-radius: 10px;">
+                            <p style="margin: 0; color: #888;">
+                                ※ 実際の運用時は、この部分にA8.netのエポスカードバナーが表示されます
+                            </p>
+                            <a href="#" class="affiliate-btn" style="margin-top: 15px; display: inline-block;">
+                                📝 エポスカード申し込み（A8.net経由）
+                            </a>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 他のカードは通常のボタン
+                affiliateButton = `
+                    <a href="${card.affiliate}" class="affiliate-btn" target="_blank" rel="noopener">
+                        📝 今すぐ申し込む
+                    </a>
+                `;
+            }
+            
             recommendationDiv.innerHTML = `
                 <div class="card-recommendation">
                     <div class="card-name">${card.name}</div>
@@ -569,9 +597,7 @@
                     <ul class="card-features">
                         ${card.features.map(feature => `<li>${feature}</li>`).join('')}
                     </ul>
-                    <a href="${card.affiliate}" class="affiliate-btn" target="_blank" rel="noopener">
-                        📝 今すぐ申し込む
-                    </a>
+                    ${affiliateButton}
                 </div>
             `;
         }
