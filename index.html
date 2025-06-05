@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クレジットカード最適診断ツール - あなたにピッタリなカードを30秒で発見</title>
+    <meta name="description" content="ライフスタイル診断であなたに最適なクレジットカードを無料で見つけられます。年会費、ポイント還元率、特典を比較して最適な1枚を選ぼう。">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question h3 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            text-align: center;
+        }
+
+        .result-card h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .card-recommendation {
+            background: white;
+            color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .card-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .card-features {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .card-features li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .card-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+        }
+
+        .affiliate-btn {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .affiliate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .steps-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: white;
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💳 クレジットカード最適診断</h1>
+            <p>あなたのライフスタイルに最適なクレジットカードを30秒で発見</p>
+        </div>
+
+        <div class="steps-indicator">
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
+        </div>
+
+        <div class="card">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+
+            <!-- Step 1: 年齢層 -->
+            <div class="step active" id="step1">
+                <div class="question">
+                    <h3>🎂 年齢層を教えてください</h3>
+                    <div class="options">
+                        <div class="option" data-value="student">18-25歳（学生・新社会人）</div>
+                        <div class="option" data-value="young">26-35歳（働き盛り世代）</div>
+                        <div class="option" data-value="middle">36-50歳（ファミリー世代）</div>
+                        <div class="option" data-value="senior">51歳以上（シニア世代）</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: 主な利用場面 -->
+            <div class="step" id="step2">
+                <div class="question">
+                    <h3>🛍️ 主にどこでカードを使いますか？</h3>
+                    <div class="options">
+                        <div class="option" data-value="online">ネットショッピング中心</div>
+                        <div class="option" data-value="retail">コンビニ・スーパー中心</div>
+                        <div class="option" data-value="travel">出張・旅行での利用が多い</div>
+                        <div class="option" data-value="dining">レストラン・飲食店中心</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: 月間利用額 -->
+            <div class="step" id="step3">
+                <div class="question">
+                    <h3>💰 月間のカード利用額はどのくらいですか？</h3>
+                    <div class="options">
+                        <div class="option" data-value="low">1-3万円</div>
+                        <div class="option" data-value="medium">3-10万円</div>
+                        <div class="option" data-value="high">10-30万円</div>
+                        <div class="option" data-value="premium">30万円以上</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: 重視するポイント -->
+            <div class="step" id="step4">
+                <div class="question">
+                    <h3>⭐ 最も重視するのはどれですか？</h3>
+                    <div class="options">
+                        <div class="option" data-value="cashback">ポイント還元率の高さ</div>
+                        <div class="option" data-value="nofee">年会費無料</div>
+                        <div class="option" data-value="benefits">付帯サービス・特典</div>
+                        <div class="option" data-value="brand">ステータス・ブランド力</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: ライフスタイル -->
+            <div class="step" id="step5">
+                <div class="question">
+                    <h3>🌟 あなたのライフスタイルは？</h3>
+                    <div class="options">
+                        <div class="option" data-value="simple">シンプル・節約志向</div>
+                        <div class="option" data-value="active">アクティブ・外出多め</div>
+                        <div class="option" data-value="family">家族重視・実用性重視</div>
+                        <div class="option" data-value="luxury">品質・サービス重視</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 結果表示 -->
+            <div class="step" id="result">
+                <div class="result-card">
+                    <h2>🎉 診断結果</h2>
+                    <p>あなたにピッタリのクレジットカードが見つかりました！</p>
+                    
+                    <div id="recommendation"></div>
+                    
+                    <button class="btn" onclick="restart()">もう一度診断する</button>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="nextBtn" onclick="nextStep()" disabled>次へ</button>
+                <button class="btn" id="prevBtn" onclick="prevStep()" style="display: none;">戻る</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let answers = {};
+        const totalSteps = 5;
+
+        // カードデータベース
+        const cardDatabase = {
+            rakuten: {
+                name: "楽天カード",
+                features: [
+                    "年会費永年無料",
+                    "楽天市場で還元率3%",
+                    "基本還元率1%",
+                    "楽天ポイントが貯まる・使える",
+                    "海外旅行傷害保険付帯"
+                ],
+                affiliate: "https://card.rakuten.co.jp/",
+                description: "ネットショッピングと日常使いの両方でお得！"
+            },
+            epos: {
+                name: "エポスカード",
+                features: [
+                    "年会費永年無料",
+                    "全国10,000店舗で優待",
+                    "海外旅行傷害保険自動付帯",
+                    "マルイで年4回10%OFF",
+                    "即日発行可能"
+                ],
+                affiliate: "https://www.eposcard.co.jp/",
+                description: "特典と優待が充実、旅行にも安心！"
+            },
+            mitsui: {
+                name: "三井住友カード(NL)",
+                features: [
+                    "年会費永年無料",
+                    "コンビニ・マクドナルドで最大5%還元",
+                    "ナンバーレスで安心",
+                    "タッチ決済対応",
+                    "最短5分でカード番号発行"
+                ],
+                affiliate: "https://www.smbc-card.com/",
+                description: "コンビニ利用が多い方に最適！"
+            },
+            jcb: {
+                name: "JCB CARD W",
+                features: [
+                    "年会費永年無料（39歳以下限定）",
+                    "基本還元率1%",
+                    "Amazonで還元率2%",
+                    "スターバックスで5.5%還元",
+                    "海外旅行傷害保険付帯"
+                ],
+                affiliate: "https://www.jcb.co.jp/",
+                description: "若い世代におすすめの高還元カード！"
+            },
+            recruit: {
+                name: "リクルートカード",
+                features: [
+                    "年会費永年無料",
+                    "基本還元率1.2%",
+                    "リクルートサービスで最大4.2%",
+                    "電子マネーチャージでもポイント",
+                    "海外・国内旅行傷害保険付帯"
+                ],
+                affiliate: "https://recruit-card.jp/",
+                description: "業界最高水準の還元率！"
+            },
+            gold: {
+                name: "三井住友カード ゴールド(NL)",
+                features: [
+                    "年間100万円利用で年会費永年無料",
+                    "空港ラウンジ無料利用",
+                    "最高2,000万円の旅行傷害保険",
+                    "コンビニ・マクドナルドで最大5%還元",
+                    "ゴールドカード限定特典"
+                ],
+                affiliate: "https://www.smbc-card.com/",
+                description: "ステータスと実用性を兼ね備えたゴールドカード！"
+            }
+        };
+
+        function selectOption(element) {
+            // 同じステップ内の他の選択肢を非選択にする
+            const options = element.parentElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            // 選択された選択肢をマーク
+            element.classList.add('selected');
+            
+            // 答えを保存
+            const stepNumber = document.querySelector('.step.active').id.replace('step', '');
+            answers[stepNumber] = element.dataset.value;
+            
+            // 次へボタンを有効化
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                // 現在のステップを非表示
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                
+                // 次のステップを表示
+                currentStep++;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                
+                // プログレスバーを更新
+                updateProgress();
+                
+                // ボタンの状態を更新
+                updateButtons();
+                
+                // ステップインジケーターを更新
+                updateStepIndicator();
+            } else {
+                // 診断完了、結果を表示
+                showResult();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                
+                updateProgress();
+                updateButtons();
+                updateStepIndicator();
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+        }
+
+        function updateButtons() {
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            
+            if (currentStep === 1) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'inline-block';
+            }
+            
+            // 現在のステップで選択されているかチェック
+            const currentStepElement = document.getElementById(`step${currentStep}`);
+            const selectedOption = currentStepElement.querySelector('.option.selected');
+            nextBtn.disabled = !selectedOption;
+            
+            if (currentStep === totalSteps) {
+                nextBtn.textContent = '診断結果を見る';
+            } else {
+                nextBtn.textContent = '次へ';
+            }
+        }
+
+        function updateStepIndicator() {
+            const dots = document.querySelectorAll('.step-dot');
+            dots.forEach((dot, index) => {
+                if (index < currentStep) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function showResult() {
+            // 全ステップを非表示
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).classList.remove('active');
+            }
+            
+            // プログレスバーを100%に
+            document.getElementById('progress').style.width = '100%';
+            
+            // ボタンを非表示
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('prevBtn').style.display = 'none';
+            
+            // 結果を表示
+            document.getElementById('result').classList.add('active');
+            
+            // おすすめカードを決定
+            const recommendedCard = getRecommendation();
+            displayRecommendation(recommendedCard);
+        }
+
+        function getRecommendation() {
+            const { 1: age, 2: usage, 3: amount, 4: priority, 5: lifestyle } = answers;
+            
+            // 診断ロジック
+            if (age === 'student' && priority === 'nofee') {
+                return 'rakuten';
+            } else if (usage === 'retail' && amount === 'medium') {
+                return 'mitsui';
+            } else if (age === 'young' && usage === 'online') {
+                return 'jcb';
+            } else if (usage === 'travel' || lifestyle === 'active') {
+                return 'epos';
+            } else if (amount === 'premium' || priority === 'brand') {
+                return 'gold';
+            } else if (priority === 'cashback') {
+                return 'recruit';
+            } else {
+                return 'rakuten'; // デフォルト
+            }
+        }
+
+        function displayRecommendation(cardKey) {
+            const card = cardDatabase[cardKey];
+            const recommendationDiv = document.getElementById('recommendation');
+            
+            recommendationDiv.innerHTML = `
+                <div class="card-recommendation">
+                    <div class="card-name">${card.name}</div>
+                    <p>${card.description}</p>
+                    <ul class="card-features">
+                        ${card.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                    <a href="${card.affiliate}" class="affiliate-btn" target="_blank" rel="noopener">
+                        📝 今すぐ申し込む
+                    </a>
+                </div>
+            `;
+        }
+
+        function restart() {
+            currentStep = 1;
+            answers = {};
+            
+            // 全ステップを非表示
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            
+            // 最初のステップを表示
+            document.getElementById('step1').classList.add('active');
+            
+            // 選択をリセット
+            document.querySelectorAll('.option').forEach(option => option.classList.remove('selected'));
+            
+            // プログレスバーをリセット
+            updateProgress();
+            
+            // ボタンをリセット
+            document.getElementById('nextBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').textContent = '次へ';
+            updateButtons();
+            
+            // ステップインジケーターをリセット
+            updateStepIndicator();
+        }
+
+        // イベントリスナーを追加
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('option')) {
+                selectOption(e.target);
+            }
+        });
+
+        // 初期化
+        updateProgress();
+        updateButtons();
+    </script>
+</body>
+</html>
