@@ -5,6 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>クレジットカード最適診断ツール - あなたにピッタリなカードを30秒で発見</title>
     <meta name="description" content="ライフスタイル診断であなたに最適なクレジットカードを無料で見つけられます。年会費、ポイント還元率、特典を比較して最適な1枚を選ぼう。">
+    <meta name="keywords" content="クレジットカード,診断,比較,年会費無料,ポイント還元率,楽天カード,エポスカード,三井住友カード,おすすめ">
+    <meta name="author" content="AppADayCreator">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://appadaycreator.github.io/credit-card-finder/">
+    <meta property="og:title" content="クレジットカード最適診断ツール - あなたにピッタリなカードを30秒で発見">
+    <meta property="og:description" content="ライフスタイル診断であなたに最適なクレジットカードを無料で見つけられます。年会費、ポイント還元率、特典を比較して最適な1枚を選ぼう。">
+    <meta property="og:image" content="https://appadaycreator.github.io/credit-card-finder/og-image.jpg">
+    <meta property="og:site_name" content="クレジットカード最適診断ツール">
+    <meta property="og:locale" content="ja_JP">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://appadaycreator.github.io/credit-card-finder/">
+    <meta property="twitter:title" content="クレジットカード最適診断ツール - あなたにピッタリなカードを30秒で発見">
+    <meta property="twitter:description" content="ライフスタイル診断であなたに最適なクレジットカードを無料で見つけられます。年会費、ポイント還元率、特典を比較して最適な1枚を選ぼう。">
+    <meta property="twitter:image" content="https://appadaycreator.github.io/credit-card-finder/og-image.jpg">
+    
+    <!-- 正規URL -->
+    <link rel="canonical" href="https://appadaycreator.github.io/credit-card-finder/">
+    
+    <!-- 検索エンジン向け構造化データ -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "クレジットカード最適診断ツール",
+        "description": "ライフスタイル診断であなたに最適なクレジットカードを無料で見つけられます",
+        "url": "https://appadaycreator.github.io/credit-card-finder/",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "JPY"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "AppADayCreator"
+        },
+        "provider": {
+            "@type": "Organization",
+            "name": "AppADayCreator",
+            "url": "https://appadaycreator.github.io/"
+        },
+        "featureList": [
+            "5ステップ簡単診断",
+            "ライフスタイル別カード推奨",
+            "年会費・還元率比較",
+            "即座に結果表示"
+        ],
+        "screenshot": "https://appadaycreator.github.io/credit-card-finder/screenshot.jpg"
+    }
+    </script>
     
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -16,14 +72,6 @@
     
     <!-- A8.net brandsafe.js事前読み込み -->
     <script type='text/javascript' src='https://ad-verification.a8.net/ad/js/brandsafe.js'></script>
-    <script type='text/javascript'>
-        // A8.netのアフィリエイトID
-        const A8_AFFILIATE_ID = '457C4C+DEUKDU+38L8+BXQOH';
-        const A8_SITE_ID = '1734';
-        const A8_ARTICLE_ID = '658';
-        const A8_LINK_ID = '2971';
-        const A8_IMAGE_ID = '3218';
-    </script>
     
     <style>
         * {
@@ -612,12 +660,12 @@
             let affiliateButton = '';
             
             if (cardKey === 'epos') {
-                // エポスカードの場合はA8.netバナーコード
+                // エポスカードの場合は実際のA8.netバナーコード（完全版）
                 affiliateButton = '<div class="a8-banner-area">' +
                     '<div class="banner-label">🎯 診断結果に基づくおすすめカード</div>' +
                     '<div id="a8-epos-banner-container">' +
-                        '<div id="div_admane_async_' + A8_SITE_ID + '_' + A8_ARTICLE_ID + '_' + A8_LINK_ID + '"></div>' +
-                        '<img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=' + A8_AFFILIATE_ID + '" alt="">' +
+                        '<div id="div_admane_async_1734_658_2971"></div>' +
+                        '<img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=457C4C+DEUKDU+38L8+BXQOH" alt="">' +
                     '</div>' +
                     '</div>';
             } else {
@@ -639,42 +687,42 @@
                     affiliateButton +
                 '</div>';
             
-            // エポスカードの場合、A8.netバナーコードを実行
+            // エポスカードの場合、A8.netバナーコードを複数の方法で実行
             if (cardKey === 'epos') {
-                let bannerLoaded = false;
+                // 方法1: スクリプト要素を動的に追加
+                setTimeout(function() {
+                    const container = document.getElementById('a8-epos-banner-container');
+                    if (container) {
+                        // 既存のスクリプトを削除
+                        const existingScripts = container.querySelectorAll('script');
+                        existingScripts.forEach(function(script) {
+                            script.remove();
+                        });
+                        
+                        // 新しいスクリプト要素を作成
+                        const newScript = document.createElement('script');
+                        newScript.type = 'text/javascript';
+                        newScript.innerHTML = 'brandsafe_js_async("//ad-verification.a8.net/ad", "_site=1734&_article=658&_link=2971&_image=3218&_ns=1&sad=s00000015110002", "250605084811", "457C4C+DEUKDU+38L8+BXQOH");';
+                        container.appendChild(newScript);
+                    }
+                }, 500);
                 
-                // バナー読み込み用の関数
-                function loadA8Banner() {
-                    if (bannerLoaded) return; // 既にバナーが読み込まれている場合は何もしない
-                    
+                // 方法2: 直接関数実行（バックアップ）
+                setTimeout(function() {
                     if (typeof brandsafe_js_async === 'function') {
                         try {
-                            brandsafe_js_async(
-                                '//ad-verification.a8.net/ad',
-                                '_site=' + A8_SITE_ID + '&_article=' + A8_ARTICLE_ID + '&_link=' + A8_LINK_ID + '&_image=' + A8_IMAGE_ID + '&_ns=1&sad=s00000015110002',
-                                '250605084811',
-                                A8_AFFILIATE_ID
-                            );
-                            bannerLoaded = true;
+                            brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link=2971&_image=3218&_ns=1&sad=s00000015110002', '250605084811', '457C4C+DEUKDU+38L8+BXQOH');
                             console.log('A8.net banner loaded successfully');
                         } catch (error) {
                             console.error('A8.net banner loading error:', error);
-                            if (!bannerLoaded) {
-                                showFallbackLink();
-                            }
+                            // フォールバック: 手動リンク表示
+                            showFallbackLink();
                         }
                     } else {
                         console.warn('brandsafe_js_async function not available');
-                        if (!bannerLoaded) {
-                            showFallbackLink();
-                        }
+                        showFallbackLink();
                     }
-                }
-
-                // バナーの読み込みを試みる
-                setTimeout(loadA8Banner, 500);
-                // バックアップとして1秒後にもう一度試みる
-                setTimeout(loadA8Banner, 1000);
+                }, 1000);
             }
         }
         
@@ -685,7 +733,7 @@
                 container.innerHTML = 
                     '<div style="text-align: center; padding: 20px; background: #f0f8ff; border: 2px solid #4169e1; border-radius: 10px;">' +
                         '<p style="margin: 0 0 15px 0; color: #4169e1; font-weight: bold;">🎯 エポスカード申し込みはこちら</p>' +
-                        '<a href="https://www.eposcard.co.jp/apply/?scid=wi_ich_cc_apply&sc2id=' + A8_AFFILIATE_ID + '" target="_blank" rel="noopener" class="affiliate-btn" style="background: linear-gradient(135deg, #ff6b6b, #ee5a24);">' +
+                        '<a href="https://www.eposcard.co.jp/" target="_blank" rel="noopener" class="affiliate-btn" style="background: linear-gradient(135deg, #ff6b6b, #ee5a24);">' +
                             '📝 エポスカード公式サイトへ' +
                         '</a>' +
                         '<p style="margin: 15px 0 0 0; font-size: 0.8rem; color: #666;">※ 年会費永年無料・即日発行可能</p>' +
